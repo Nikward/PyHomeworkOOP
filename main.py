@@ -6,10 +6,10 @@ def rating(dict_value):
                 val.append(i)
     result = sum(val) / len(val)
     return result
+
 def student_rating(list_student, course):
     sum_grades = 0
     len_grades = 0
-
     for student in list_student:
         if course in student.courses_in_progress:
             for number in student.grades[course]:
@@ -17,6 +17,7 @@ def student_rating(list_student, course):
                 len_grades += 1
     result = sum_grades / len_grades
     return result
+
 def lecturer_rating(list_lecturer, course):
     sum_grades = 0
     len_grades = 0
@@ -29,8 +30,8 @@ def lecturer_rating(list_lecturer, course):
     result = sum_grades / len_grades
     return result
 
-
 class Student:
+
     def __init__(self, name, surname, gender):
         self.name = name
         self.surname = surname
@@ -39,6 +40,7 @@ class Student:
         self.courses_in_progress = []
         self.grades = {}
         self.av_grade_hw = float()
+
     def rate_lecturer(self, lecturer, course, grade):
         if isinstance(lecturer, Lecturer) and course in lecturer.courses_attached and course in self.courses_in_progress:
             if course in lecturer.grades:
@@ -57,15 +59,16 @@ class Student:
         self.av_grade_hw = sum(map(sum, self.grades.values()))/number_value
        
         result = f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за домашние задания: {self.av_grade_hw}\nКурсы в процессе изучения: {progress_courses}\nЗавершенные курсы: {finish_course}'
-        return result  
+        return result
+
     def __lt__(self, other):
         if not isinstance(other, Student):
             print('Not a class Student')
             return
         return rating(self.grades) < rating(other.grades)
 
-
 class Mentor:
+
     def __init__(self, name, surname):
         self.name = name
         self.surname = surname
@@ -95,6 +98,7 @@ class Lecturer(Mentor):
 
 
 class Reviewer(Mentor):
+
     def rate_hw(self, student, course, grade):
         if isinstance(student, Student) and course in self.courses_attached and course in student.courses_in_progress:
             if course in student.grades:
@@ -103,6 +107,7 @@ class Reviewer(Mentor):
                 student.grades[course] = [grade]
         else:
             return 'Ошибка'
+
     def __str__(self):
         input = f"Имя: {self.name}\nФамилия: {self.surname}"
         return input
