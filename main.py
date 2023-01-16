@@ -1,3 +1,35 @@
+def rating(dict_value):
+    if isinstance(dict_value, dict):
+        val =[]
+        for elem in dict_value.values():
+            for i in elem:
+                val.append(i)
+    result = sum(val) / len(val)
+    return result
+def student_rating(list_student, course):
+    sum_grades = 0
+    len_grades = 0
+
+    for student in list_student:
+        if course in student.courses_in_progress:
+            for number in student.grades[course]:
+                sum_grades += number
+                len_grades += 1
+    result = sum_grades / len_grades
+    return result
+def lecturer_rating(list_lecturer, course):
+    sum_grades = 0
+    len_grades = 0
+
+    for lecturer in list_lecturer:
+        if course in lecturer.courses_attached:
+            for number in lecturer.grades[course]:
+                sum_grades += number
+                len_grades += 1
+    result = sum_grades / len_grades
+    return result
+
+
 class Student:
     def __init__(self, name, surname, gender):
         self.name = name
@@ -30,7 +62,7 @@ class Student:
         if not isinstance(other, Student):
             print('Not a class Student')
             return
-        return self.av_grade_hw < other.av_grade_hw
+        return rating(self.grades) < rating(other.grades)
 
 
 class Mentor:
@@ -59,7 +91,7 @@ class Lecturer(Mentor):
         if not isinstance(other, Lecturer):
             print('Not a class Lecturer')
             return
-        return self.av_grade < other.av_grade
+        return rating(self.grades) < rating(other.grades)
 
 
 class Reviewer(Mentor):
@@ -120,51 +152,7 @@ super_reviewer2.rate_hw(best_student2, "Git", 7)
 list_student = [best_student, best_student2]
 list_lecturer = [lecturer1, lecturer2]
 
-def student_rating(list_student, course):
-    sum_grades = 0
-    len_grades = 0
-    
-    for student in list_student:
-        if course in student.courses_in_progress:
-            for number in student.grades[course]:
-                sum_grades += number
-                len_grades += 1
-    result = sum_grades / len_grades
-    return result
+print(student_rating(list_student, 'Python'))
 
-
-def lecturer_rating(list_lecturer, course):
-    sum_grades = 0
-    len_grades = 0
-    
-    for lecturer in list_lecturer:
-        if course in lecturer.courses_attached:
-            for number in lecturer.grades[course]:
-                sum_grades += number
-                len_grades += 1
-    result = sum_grades / len_grades
-    return result
-print("Студенты:")
-print(best_student)
-print()
-print(best_student2)
-print()
-print(f'Результат сравнения студентов (по средним оценкам за лекции): '
-      f'{best_student.name} {best_student.surname} < {best_student2.name} {best_student2.surname} = {best_student > best_student2}')
-print()
-print("Лекторы:")
-print(lecturer1)
-print()
-print(lecturer2)
-print()
-print(f'Результат сравнения лекторов (по средним оценкам за лекции): '
-      f'{lecturer1.name} {lecturer1.surname} < {lecturer2.name} {lecturer2.surname} = {lecturer1 > lecturer2}')
-print()
-
-
-print(f"Средняя оценка для всех студентов по курсу {'Python'}: {student_rating(list_student, 'Python')}")
-print()
-
-# Выводим результат подсчета средней оценки по всем лекорам для данного курса
-print(f"Средняя оценка для всех лекторов по курсу {'Python'}: {lecturer_rating(list_lecturer, 'Python')}")
-print()
+print(best_student < best_student2)
+print(lecturer1 > lecturer2)
